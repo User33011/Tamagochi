@@ -1,4 +1,9 @@
-/*void button_loop(){
+/*___________________________________________________________________________
+  |Эта функция использовалась ранее, в качестве обработчика нажатия кнопок. |
+  |Впоследствии я от нее отказался, но не стал удалять из проекта.          |                                                                |
+  ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+
+void button_loop(){
   button.flag = false;
   button.A = digitalRead(BUTTON_A);
   button.B = digitalRead(BUTTON_B);
@@ -37,14 +42,6 @@
     button.timer = millis();
     }
 }
-
-
-
-
-
-
-
-
         if (!button.A && !button.flag && millis() - button.timer > 100) {
             button.flag = true;
             button.timer = millis();break;
@@ -73,24 +70,4 @@
             button.flag = false; // Сброс флага при отсутствии нажатий.
             button.timer = millis();
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 */
