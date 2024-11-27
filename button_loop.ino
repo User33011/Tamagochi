@@ -37,14 +37,6 @@
     button.timer = millis();
     }
 }
-
-
-
-
-
-
-
-
         if (!button.A && !button.flag && millis() - button.timer > 100) {
             button.flag = true;
             button.timer = millis();break;
