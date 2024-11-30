@@ -36,7 +36,8 @@ void tama_loop() {
     tama.happiness -= (40 - tama.health) > 0 ? (40 - tama.health) : 0; // Уменьшение из-за здоровья
 
     // Проверка состояния питомца
-    if (tama.sleep == 0) {
+    if (tama.sleep == 0 && !tama.SleepFlag) {
+        tama.SleepFlag = true;
         tama.state = ST_SLEEPING; // Если нет очков сна
     } else if (tama.happiness >= 80) {
         tama.state = ST_HAPPY;    // Питомец счастлив
@@ -52,6 +53,9 @@ void tama_loop() {
     }
     if (ST_SLEEPING) {
         tama.sleep ++;    // Добавление очков сна
+    }
+    if (ST_SLEEPING && tama.SleepFlag && tama.sleep >= 30) {
+        tama.SleepFlag = false;    // Сняли флаг сна
     }
     if (tama.shit < 40 && !tama.ShitFlag){ 
       updateActiveStates(SHIT);
