@@ -119,13 +119,16 @@ struct {
 struct {
 	enum tama_state state;
   int age;
+  int day;
 	int sleep;
   int health;
   int food;
   int water;
   int game;
   int shit;
+  int happiness;
   bool flag = false;
+  bool ShitFlag = false;
   uint32_t timer;
 } tama;
 
@@ -134,6 +137,7 @@ struct {
   int B;
   int C;
   int D;
+  int UP;
   bool flag = false;
   uint32_t timer;
 } button;
@@ -157,6 +161,7 @@ struct{
 
 const int scoreLevels[] = {2, 4, 6, 8}; 
 
+const int ICONS_PER_PAGE = 6; // icon
 const int menuCount = 6;      // menu
 const int MAX_ICONS = 8;      // icon
 
@@ -176,7 +181,7 @@ PetCondition petConditions[NUM_PET_CONDITIONS] = {                              
     { TEMP, temp },
 };
 const char* menuItems[menuCount] = 
-{"sensor", "debug", "game", "time", "life", "SHIT",};
+{"sensor", "debug", "status", "time", "life", "SHIT",};
 
 PetState activeStates[MAX_ICONS];
 
@@ -189,7 +194,7 @@ Serial.begin(9600);
 
 rtc.begin();
 Wire.begin();
-rtc.setTime(BUILD_SEC, BUILD_MIN, BUILD_HOUR, BUILD_DAY, BUILD_MONTH, BUILD_YEAR); 
+//rtc.setTime(BUILD_SEC, BUILD_MIN, BUILD_HOUR, BUILD_DAY, BUILD_MONTH, BUILD_YEAR); 
 
 oled.init();
 oled.clear();
@@ -218,8 +223,10 @@ void tama_init()
   tama.health = 99;
   tama.sleep  = 99;
   tama.shit   = 99;
-  tama.game   = 0;
-  tama.age    = 0;
+  tama.game   = 99;
+  tama.day   = 0;
+  tama.age   = 0;
+  tama.happiness = 100;
   while(millis() - tama.timer < 3000){
     oled.setScale(3);
     oled.setCursor(0, 0);
