@@ -13,29 +13,24 @@ void indikat() {
         
         // Навигация по иконкам
         // Переход вверх по строкам.
-        if (!button.A && !button.flag && millis() - button.timer > 200) {
+        if (!button.A && !button.flag && millis() - button.timer > 100) {
             button.flag = true;
             button.timer = millis();
             break;
-            // Переход вниз по строкам.
-        } else if (!button.D && !button.flag && millis() - button.timer > 200) {
-            button.flag = true;
-            button.timer = millis();
-            currentCondition = (currentCondition - 1) % NUM_PET_CONDITIONS;
-            if(currentCondition <= 0){
-              currentCondition = 0;
-            }
-            // Влево.
-        } else if (!button.C && !button.flag && millis() - button.timer > 200) {
-            button.flag = true;
-            button.timer = millis();
-            currentCondition = (currentCondition + 1) % NUM_PET_CONDITIONS;
-             // Вправо.
-        } else if (!button.B && !button.flag && millis() - button.timer > 200) {
+        } else if (!button.B && !button.flag && millis() - button.timer > 100) {
             button.flag = true;
             button.timer = millis();
             SelectedOption(currentCondition);
             break;
+        } else if (!button.C && !button.flag && millis() - button.timer > 100) {
+            button.flag = true;
+            button.timer = millis();
+            currentCondition = (currentCondition + 1) % NUM_PET_CONDITIONS;
+        } else if (!button.D && !button.flag && millis() - button.timer > 100) {
+            button.flag = true;
+            button.timer = millis();
+            currentCondition = (currentCondition - 1) % NUM_PET_CONDITIONS;
+            if  (currentCondition < 0) currentCondition = MAX_ICONS;
         } else {
             button.flag = false; // Сброс флага при отсутствии нажатий.
             button.timer = millis();
@@ -62,30 +57,38 @@ void SelectedOption(int index) {
     switch (index) {
         case 0:
             eatPet();
+            // Здесь может быть код для выполнения действия пункта 1
             break;
         case 1:
             goSleep();
+            // Здесь может быть код для выполнения действия пункта 2
             break;
         case 2:
-            medical();
+           playGame();
+            // Здесь может быть код для выполнения действия пункта 2
             break;
         case 3:
-            bullShit();
+            drink();
+            // Здесь может быть код для выполнения действия пункта 2
             break;
         case 4:
-            drink();
+            bullShit();
+            // Здесь может быть код для выполнения действия пункта 2
             break;
         case 5:
-            playGame();
+            medical();
+            // Здесь может быть код для выполнения действия пункта 2
             break;
         case 6:
-            ventilation();
+            perhead();
+            // Здесь может быть код для выполнения действия пункта 2
             break;
         case 7:
-            perhead();
+            ventilation();
+            // Здесь может быть код для выполнения действия пункта 2
             break;
         default:
             break;
     }
-    
+    indikat();
 }
