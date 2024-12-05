@@ -74,9 +74,6 @@ static int game_over_screen()
 	oled.setCursor(30, 4);
 	oled.print("OVER");
 	oled.update();
-	while (millis() - tmr < 500);
-	oled.clear();
-	oled.update();
 	while (millis() - tmr < 1000);
   }
   oled.clear();
@@ -93,12 +90,12 @@ static int game_over_screen()
 
   uint16_t btnA = 0, btnB = 0;
   while(true) {
-    if (digitalRead(BUTTON_A))
+    if (!digitalRead(BUTTON_A))
 	btnA++;
     else
 	btnA = 0;
 
-    if (digitalRead(BUTTON_B))
+    if (!digitalRead(BUTTON_B))
 	btnB++;
     else
 	btnB = 0;
