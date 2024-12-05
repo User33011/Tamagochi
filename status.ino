@@ -12,8 +12,8 @@ void status_loop() {
         oled.clear();
 
         // Печать заголовков
-        const char* titles[] = {"Голод", "Жажда", "Игра", "Сон", "Лоток", "Здоровье"};
-        for (int i = 0; i < 6; i++) {
+        const char* titles[] = {"Голод", "Жажда", "Игра", "Сон", "Лоток", "Здоровье", "Радость"};
+        for (int i = 0; i < 8; i++) {
             oled.setCursor(0, i);
             oled.print(titles[i]);
         }
@@ -25,6 +25,7 @@ void status_loop() {
         displayValue(tama.sleep, 3);
         displayValue(tama.shit, 4);
         displayValue(tama.health, 5);
+        displayValue(tama.happiness, 6);
         oled.update();
         // Обновление состояния раз в 2000 мс
         if (lifetimer >= 2000) {
