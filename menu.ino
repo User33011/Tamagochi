@@ -1,50 +1,40 @@
 
 void bot_loop() {
-  while (true) {
-  sensor_read();
-  button.A = digitalRead(BUTTON_A);
-  button.B = digitalRead(BUTTON_B);
-  button.C = digitalRead(BUTTON_C);
-  button.D = digitalRead(BUTTON_D);
+  uint16_t btnB = 0, btnC = 0, btnD = 0;
+  while(true) {
+  if (!digitalRead(BUTTON_B))
+	btnB++;
+    else
+	btnB = 0;
+  if (!digitalRead(BUTTON_C))
+	btnC++;
+    else
+	btnC = 0;
+  if (!digitalRead(BUTTON_D))
+	btnD++;
+    else
+	btnD = 0;
 
-    // Обработка кнопок
-
-    if (!button.C && !button.flag && millis() - button.timer > 100) {
-            button.flag = true;
-            selectedIndex--;
+  if (btnB > 5000) {
+    executeSelectedOption(selectedIndex);
+    btnB = 0;
+  } else if (btnC > 5000) {
+    selectedIndex--;
             if (selectedIndex < 0) {
                 selectedIndex = menuCount - 1; // Зацикливаем вниз
-            }
-            button.timer = millis();
-            showMenu(selectedIndex); // Перерисовываем меню
-    }
+            }        
+    showMenu(selectedIndex);
+    btnC = 0;
 
-    else if (!button.D && !button.flag && millis() - button.timer > 100) { // Кнопка "вниз"
-            button.flag = true;
-            selectedIndex++;
+  } else if (btnD > 5000) {
+    selectedIndex++;
             if (selectedIndex >= menuCount) {
                 selectedIndex = 0; // Зацикливаем вверх
             }
-            button.timer = millis();
-            showMenu(selectedIndex); // Перерисовываем меню
-        }
-
-    else if (!button.B && !button.flag && millis() - button.timer > 100) { // Кнопка "выбор"
-            button.flag = true;
-            button.timer = millis();
-            executeSelectedOption(selectedIndex); // Выполняем выбранное действие
-            
-        }
-    else if (!button.A && !button.flag && millis() - button.timer > 100) { // Кнопка "выбор"
-            button.flag = true;
-            button.timer = millis();
-            break;           
-        }
-    else {
-      button.flag = false;
-      button.timer = millis();
-    }
+    showMenu(selectedIndex);
+    btnD = 0;
   }
+}
 }
 
 void showMenu(int index) {
@@ -58,17 +48,14 @@ void showMenu(int index) {
             oled.setScale(1);
             // Отображение выбранного элемента с символами '>' и '<'
             oled.setCursor(0, (i - startIndex) + 1); // Установить курсор в начале строки
-           // oled.print(">");
             oled.invertText(1);
             oled.print(menuItems[i]);
             oled.invertText(0);
-           // oled.print("<");
         } else {
             oled.setCursor(0, (i - startIndex) + 1); // Установить курсор в начале строки
             oled.print(menuItems[i]);
         }
     }
-    // Рисуем полосу прокрутки
     oled.update(); // Обновление дисплея
 }
 
@@ -78,11 +65,10 @@ void executeSelectedOption(int index) {
             indikat();
             break;
         case 1:
-            lifetimer = 0;
             debug();
             break;
         case 2:
-            game_setup();
+            status_loop();
             break;
         case 3:
             displayTime();
@@ -91,7 +77,6 @@ void executeSelectedOption(int index) {
             tama_draw();
             break;
         case 5:
-            lifetimer = 0;
             byte_draw();
             break;
         default:
