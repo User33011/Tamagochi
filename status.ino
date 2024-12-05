@@ -1,98 +1,99 @@
-void status() {
-  button.flag = false;
+void status_loop() {
 while(true){
-  button.A = digitalRead(BUTTON_A);
-  button.B = digitalRead(BUTTON_B);
-  button.C = digitalRead(BUTTON_C);
-  button.D = digitalRead(BUTTON_D);
+  const int btnA = digitalRead(BUTTON_A);
 
-  if(lifetimer >= 60000){
-    lifetimer = 0;
-    tama_loop();
-  }
   oled.clear();
 
   oled.setCursor(0, 0);
-  oled.print("Еда");
+  oled.print("Голод");
+  oled.setCursor(0, 1);
+  oled.print("Жажда");
+  oled.setCursor(0, 2);
+  oled.print("Игра");
+  oled.setCursor(0, 3);
+  oled.print("Сон");
+  oled.setCursor(0, 4);
+  oled.print("Лоток");
+  oled.setCursor(0, 5);
+  oled.print("Здоровье");
+  oled.setCursor(0, 6);
+  oled.print(" ");
+
   if(tama.food < 10){
-    oled.setCursor(17, 0);
+    oled.setCursor(50, 0);
     oled.print(tama.food);
-    oled.setCursor(23, 0);
+    oled.setCursor(55, 0);
     oled.print(" ");
   } else {
-  oled.setCursor(17, 0);
+  oled.setCursor(50, 0);
   oled.print(tama.food); 
   }
 
-  oled.setCursor(0, 1);
-  oled.print("Вода");
   if(tama.water < 10){
-    oled.setCursor(23, 1);
+    oled.setCursor(50, 1);
     oled.print(tama.water);
-    oled.setCursor(28, 1);
+    oled.setCursor(55, 1);
     oled.print(" ");
   } else {
-  oled.setCursor(23, 1);
+  oled.setCursor(50, 1);
   oled.print(tama.water); 
   }
 
-  oled.setCursor(0, 2);
-  oled.print("Игра");
   if(tama.game < 10){
-    oled.setCursor(23, 2);
+    oled.setCursor(50, 2);
     oled.print(tama.game);
-    oled.setCursor(28, 2);
+    oled.setCursor(55, 2);
     oled.print(" ");
   } else {
-  oled.setCursor(23, 1);
+  oled.setCursor(50, 2);
   oled.print(tama.game); 
   }
 
-  oled.setCursor(0, 3);
-  oled.print("Сон");
   if(tama.sleep < 10){
-    oled.setCursor(17, 3);
+    oled.setCursor(50, 3);
     oled.print(tama.sleep);
-    oled.setCursor(23, 3);
+    oled.setCursor(55, 3);
     oled.print(" ");
   } else {
-  oled.setCursor(17, 3);
+  oled.setCursor(50, 3);
   oled.print(tama.sleep); 
   }
-  
-  oled.setCursor(0, 4);
-  oled.print("Срач");
+
   if(tama.shit < 10){
-    oled.setCursor(23, 4);
+    oled.setCursor(50, 4);
     oled.print(tama.shit);
-    oled.setCursor(28, 4);
+    oled.setCursor(55, 4);
     oled.print(" ");
   } else {
-  oled.setCursor(23, 4);
+  oled.setCursor(50, 4);
   oled.print(tama.shit); 
   }
 
-  oled.setCursor(0, 5);
-  oled.print("Хилс");
   if(tama.health < 10){
-    oled.setCursor(23, 5);
+    oled.setCursor(50, 5);
     oled.print(tama.health);
-    oled.setCursor(28, 5);
+    oled.setCursor(55, 5);
     oled.print(" ");
   } else {
-  oled.setCursor(23, 5);
+  oled.setCursor(50, 5);
   oled.print(tama.health); 
   }
 
-  oled.update();
-  if (!button.A && !button.flag && millis() - button.timer > 200) {
-            button.flag = true;
-            button.timer = millis();
-            break;
-            // Переход вниз по строкам.
+  if(tama.happiness < 10){
+    oled.setCursor(50, 6);
+    oled.print(tama.happiness);
+    oled.setCursor(55, 6);
+    oled.print(" ");
   } else {
-    button.flag = false;
-    button.timer = millis();
+  oled.setCursor(50, 6);
+  oled.print(tama.happiness); 
   }
+  
+  oled.update();
+  if(lifetimer >= 10000){
+    lifetimer = 0;
+    tama_loop();
+  } 
+  if (!btnA) break;
 }
 }
