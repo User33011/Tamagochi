@@ -10,30 +10,33 @@ void tama_loop() {
     tama.shit--;
     tama.day++;
     // Возраст
-    if (tama.day >= 365) tama.age++;
+    if (tama.day >= 365) {
+      tama.age++;
+      tama.day = 0;
+      }
     // Защита от отрицательных значений
     if (tama.sleep <= 0) tama.sleep = 0; 
     if (tama.food <= 0) tama.food = 0; 
     if (tama.water <= 0) tama.water = 0; 
-    if (tama.health <= 0) tama.health = 0; 
     if (tama.game <= 0) tama.game = 0; 
     if (tama.shit <= 0) tama.shit = 0;
     // Защита от превышения
     if (tama.sleep >= 99) tama.sleep = 99; 
     if (tama.food >= 99) tama.food = 99; 
     if (tama.water >= 99) tama.water = 99; 
-    if (tama.health >= 100) tama.health = 100; 
     if (tama.game >= 99) tama.game = 99; 
     if (tama.shit >= 99) tama.shit = 99;
-
     // Рассчитываем коэффициент счастья
     // Уменьшение счастья из-за нехватки еды, воды и сна
-    tama.happiness -= (20 - tama.food) > 0 ? (20 - tama.food) * 2 : 0; // Уменьшение из-за еды
-    tama.happiness -= (20 - tama.shit) > 0 ? (20 - tama.shit) * 3 : 0; // Уменьшение из-за туалета
-    tama.happiness -= (20 - tama.water) > 0 ? (20 - tama.water) * 2 : 0; // Уменьшение из-за воды
-    tama.happiness -= (20 - tama.sleep) > 0 ? (20 - tama.sleep) * 3 : 0; // Уменьшение из-за сна
-    tama.happiness -= (20 - tama.game) > 0 ? (20 - tama.game) : 0; // Уменьшение из-за игры
-    tama.happiness -= (40 - tama.health) > 0 ? (40 - tama.health) : 0; // Уменьшение из-за здоровья
+    tama.happiness -= (tama.food < 50) > 0 ? 2 : 0;   // Уменьшение из-за еды
+    tama.happiness -= (tama.shit < 50) > 0 ? 3 : 0;   // Уменьшение из-за туалета
+    tama.happiness -= (tama.water < 50) > 0 ? 2 : 0;  // Уменьшение из-за воды
+    tama.happiness -= (tama.sleep < 50) > 0 ? 3 : 0;  // Уменьшение из-за сна
+    tama.happiness -= (tama.game < 50) > 0 ? 1 : 0;   // Уменьшение из-за игры
+    tama.happiness -= (tama.health < 50) > 0 ? 3 : 0; // Уменьшение из-за здоровья
+
+    if (tama.happiness <= 0) tama.happiness = 0;
+    if (tama.happiness >= 99) tama.happiness = 99;
 
     // Проверка состояния питомца
     if (tama.sleep == 0 && !tama.SleepFlag) {
@@ -48,13 +51,19 @@ void tama_loop() {
     }
 
     // Логика изменения здоровья
-    if (tama.food < 30 || tama.water < 30 || tama.sleep < 30 || tama.shit < 40 || tama.game < 5) {
-        tama.health -= 1; // Ухудшение здоровья
-    }
-    if (ST_SLEEPING) {
+    tama.health -= (tama.food < 30) > 0 ? 2 : 0;  // Уменьшение из-за еды
+    tama.health -= (tama.shit < 30) > 0 ? 3 : 0;  // Уменьшение из-за туалета
+    tama.health -= (tama.water < 30) > 0 ? 2 : 0; // Уменьшение из-за воды
+    tama.health -= (tama.sleep < 30) > 0 ? 3 : 0; // Уменьшение из-за сна
+
+    if (tama.health >= 99) tama.health = 99; 
+    if (tama.health <= 0) tama.health = 0; 
+    
+ /*   if (ST_SLEEPING) {
         tama.sleep ++;    // Добавление очков сна
     }
-    if (ST_SLEEPING && tama.SleepFlag && tama.sleep >= 30) {
+    */
+    if (tama.SleepFlag && tama.sleep >= 30) {
         tama.SleepFlag = false;    // Сняли флаг сна
     }
     if (tama.shit < 40 && !tama.ShitFlag){ 
