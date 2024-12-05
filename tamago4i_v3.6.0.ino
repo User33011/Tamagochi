@@ -28,7 +28,6 @@
 #define NUM_PET_CONDITIONS 8
 
 
-
 GyverOLED<SSD1306_128x64, OLED_BUFFER> oled;
 MicroDS3231 rtc;
 DHT11 dht11(HT_SENSOR);
@@ -129,6 +128,7 @@ struct {
   int happiness;
   bool flag = false;
   bool ShitFlag = false;
+  bool SleepFlag = false;
   uint32_t timer;
 } tama;
 
@@ -157,11 +157,12 @@ struct{
   int ballY = SCREEN_HEIGHT / 2;                     // Y координата мяча
   int ballXSpeed = -1;                                // Скорость мяча по X
   int ballYSpeed = -1;                               // Скорость мяча по Y   
+  int level;
+  int score;
 } game;
 
 const int scoreLevels[] = {2, 4, 6, 8}; 
 
-const int ICONS_PER_PAGE = 6; // icon
 const int menuCount = 6;      // menu
 const int MAX_ICONS = 8;      // icon
 
@@ -181,7 +182,7 @@ PetCondition petConditions[NUM_PET_CONDITIONS] = {                              
     { TEMP, temp },
 };
 const char* menuItems[menuCount] = 
-{"sensor", "debug", "status", "time", "life", "SHIT",};
+{"sensor", "debug", "status", "time", "life", "game",};
 
 PetState activeStates[MAX_ICONS];
 
@@ -217,16 +218,16 @@ showMenu(selectedIndex); // Отображение начального сост
 //----------------Функция инициализации состояния тамагочи--------------------------------
 void tama_init()
 {
-	tama.state  = ST_OK;
-	tama.water  = 99;
-  tama.food   = 50;
-  tama.health = 99;
-  tama.sleep  = 99;
-  tama.shit   = 99;
-  tama.game   = 99;
-  tama.day   = 0;
-  tama.age   = 0;
-  tama.happiness = 100;
+tama.state  = ST_OK;
+tama.water  = 50;
+tama.food   = 50;
+tama.health = 99;
+tama.sleep  = 50;
+tama.shit   = 50;
+tama.game   = 50;
+tama.day   = 0;
+tama.age   = 0;
+tama.happiness = 99;
   while(millis() - tama.timer < 3000){
     oled.setScale(3);
     oled.setCursor(0, 0);
