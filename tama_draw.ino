@@ -1,13 +1,9 @@
 void tama_draw() {
   while(true){
-  button.A = digitalRead(BUTTON_A);
-  button.B = digitalRead(BUTTON_B);
-  button.C = digitalRead(BUTTON_C);
-  button.D = digitalRead(BUTTON_D);
-  button.flag = false;
+  const int btnA = digitalRead(BUTTON_A);
   oled.clear();
   displayPetIcons();
-  if(lifetimer >= 1000){
+  if(lifetimer >= 10000){
     lifetimer = 0;
     tama_loop();
   } 
@@ -44,45 +40,9 @@ void tama_draw() {
   oled.fastLineH(50, 50, 127);
 
   oled.rect(0, 0, 127, 63, OLED_STROKE);
-
-/*  oled.setCursorXY(70, 54);
-  oled.print(tama.food);
-  oled.setCursorXY(52, 54);
-  oled.print("Еда");
-*/
+  
   oled.update();
-
-  if (!button.A && !button.flag && millis() - button.timer > 200) {
-            button.flag = true;
-            button.timer = millis();
-            break;
-  }
-  if (!button.B && !button.flag && millis() - button.timer > 200) {
-            button.flag = true;
-            button.timer = millis();
-            scrollIcon();
-  }
-  if (!button.C && !button.flag && millis() - button.timer > 200) {
-            button.flag = true;
-            button.timer = millis();
-            SelectedOption(currentStartIndex);
-  }
-  else if (!button.D && !button.flag && millis() - button.timer > 200) {
-    button.flag = true;
-    button.timer = millis();
-    updateActiveStates(HUNGRY);
-    updateActiveStates(SLEEPY);
-    updateActiveStates(HEALTH);
-    updateActiveStates(SHIT);
-    updateActiveStates(THIRSTY);
-    updateActiveStates(PLAY);
-    updateActiveStates(TEMP);
-    updateActiveStates(COLD);
-
-  } else {
-      button.timer = millis();
-      button.flag = false;
-  }
+  if (!btnA) break;
   }
 }
 
