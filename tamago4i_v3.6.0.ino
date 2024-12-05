@@ -200,7 +200,6 @@ Wire.begin();
 oled.init();
 oled.clear();
 sensor_read();
-tama_init();
 
 pinMode (VOLTAGE, INPUT);
 pinMode (LASER, OUTPUT);
@@ -211,38 +210,88 @@ pinMode(BUTTON_A, INPUT_PULLUP);
 pinMode(BUTTON_B, INPUT_PULLUP);
 pinMode(BUTTON_C, INPUT_PULLUP);
 pinMode(BUTTON_D, INPUT_PULLUP);
-oled.setScale(1);
-showMenu(selectedIndex); // Отображение начального состояния меню
+tama_init();
 }
 
 //----------------Функция инициализации состояния тамагочи--------------------------------
 void tama_init()
 {
-tama.state  = ST_OK;
-tama.water  = 50;
-tama.food   = 50;
-tama.health = 99;
-tama.sleep  = 50;
-tama.shit   = 50;
-tama.game   = 50;
-tama.day   = 0;
-tama.age   = 0;
-tama.happiness = 99;
+	tama.state  = ST_OK;
+	tama.water  = 50;
+  tama.food   = 50;
+  tama.health = 99;
+  tama.sleep  = 50;
+  tama.shit   = 50;
+  tama.game   = 50;
+  tama.day   = 0;
+  tama.age   = 0;
+  tama.happiness = 99;
   while(millis() - tama.timer < 3000){
     oled.setScale(3);
     oled.setCursor(0, 0);
     oled.print("Электро");
     oled.setCursor(0, 4);
     oled.print("Питомец");
-    oled.setScale(1);
     oled.update();
   }
+  oled.setScale(1);
   tama.timer = millis();
 }
 //----------------Конец функции инициализации состояния тамагочи--------------------------
 
 void loop() {
-  while(true) {
-  bot_loop();
-  }
+    uint16_t btnB = 0, btnC = 0, btnD = 0;
+    const uint16_t threshold = 5000; // Пороговое значение нажатий
+    int lastSelectedIndex = selectedIndex; // Для сравнения состояний
+    showMenu(selectedIndex);
+    while (true) {
+        // Чтение состояния кнопок
+        bool buttonBPressed = !digitalRead(BUTTON_B);
+        bool buttonCPressed = !digitalRead(BUTTON_C);
+        bool buttonDPressed = !digitalRead(BUTTON_D);
+
+        // Обработка нажатия кнопок
+        if (buttonBPressed) {
+            btnB++;
+        } else {
+            btnB = 0;
+        }
+        if (buttonCPressed) {
+            btnC++;
+        } else {
+            btnC = 0;
+        }
+        if (buttonDPressed) {
+            btnD++;
+        } else {
+            btnD = 0;
+        }
+        // Проверка нажатий и выполнение действий
+        if (btnB > threshold) {
+            executeSelectedOption(selectedIndex);
+            btnB = 0; // Сбрасываем счетчик после выполнения
+        } 
+        if (btnC > threshold) {
+            selectedIndex--;
+            if (selectedIndex < 0) {
+                selectedIndex = menuCount - 1; // Зацикливаем вниз
+            }
+            if (lastSelectedIndex != selectedIndex) {
+                showMenu(selectedIndex); // Обновляем меню
+                lastSelectedIndex = selectedIndex; // Обновляем индекс
+            }
+            btnC = 0; // Сбрасываем счетчик
+        } 
+        if (btnD > threshold) {
+            selectedIndex++;
+            if (selectedIndex >= menuCount) {
+                selectedIndex = 0; // Зацикливаем вверх
+            }
+            if (lastSelectedIndex != selectedIndex) {
+                showMenu(selectedIndex); // Обновляем меню
+                lastSelectedIndex = selectedIndex; // Обновляем индекс
+            }
+            btnD = 0; // Сбрасываем счетчик
+        }
+    }
 }
