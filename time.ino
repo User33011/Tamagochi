@@ -1,6 +1,6 @@
 void displayTime() { 
   while(true){
-  button.A = digitalRead(BUTTON_A);
+  const int btnA = digitalRead(BUTTON_A);
   oled.clear();
   oled.setScale(1);
   oled.home();
@@ -23,15 +23,6 @@ void displayTime() {
   while(millis() - tama.timer < 1000){
     ;
   }
-    // Обработка кнопки
-    if (!button.A && !button.flag && millis() - button.timer > 100) {
-      button.flag = true;
-      button.timer = millis();
-      break;
-    }
-    else {
-      button.flag = false;
-      button.timer = millis();
-    }
+  if (!btnA) break;
   }
 }
