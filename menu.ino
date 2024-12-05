@@ -1,40 +1,58 @@
-
 void bot_loop() {
-  uint16_t btnB = 0, btnC = 0, btnD = 0;
-  while(true) {
-  if (!digitalRead(BUTTON_B))
-	btnB++;
-    else
-	btnB = 0;
-  if (!digitalRead(BUTTON_C))
-	btnC++;
-    else
-	btnC = 0;
-  if (!digitalRead(BUTTON_D))
-	btnD++;
-    else
-	btnD = 0;
+    uint16_t btnB = 0, btnC = 0, btnD = 0;
+    const uint16_t threshold = 5000; // Пороговое значение нажатий
+    int lastSelectedIndex = selectedIndex; // Для сравнения состояний
 
-  if (btnB > 5000) {
-    executeSelectedOption(selectedIndex);
-    btnB = 0;
-  } else if (btnC > 5000) {
-    selectedIndex--;
+    while (true) {
+        // Чтение состояния кнопок
+        bool buttonBPressed = !digitalRead(BUTTON_B);
+        bool buttonCPressed = !digitalRead(BUTTON_C);
+        bool buttonDPressed = !digitalRead(BUTTON_D);
+
+        // Обработка нажатия кнопок
+        if (buttonBPressed) {
+            btnB++;
+        } else {
+            btnB = 0;
+        }
+        if (buttonCPressed) {
+            btnC++;
+        } else {
+            btnC = 0;
+        }
+        if (buttonDPressed) {
+            btnD++;
+        } else {
+            btnD = 0;
+        }
+        // Проверка нажатий и выполнение действий
+        if (btnB > threshold) {
+            executeSelectedOption(selectedIndex);
+            btnB = 0; // Сбрасываем счетчик после выполнения
+        } 
+        if (btnC > threshold) {
+            selectedIndex--;
             if (selectedIndex < 0) {
                 selectedIndex = menuCount - 1; // Зацикливаем вниз
-            }        
-    showMenu(selectedIndex);
-    btnC = 0;
-
-  } else if (btnD > 5000) {
-    selectedIndex++;
+            }
+            if (lastSelectedIndex != selectedIndex) {
+                showMenu(selectedIndex); // Обновляем меню
+                lastSelectedIndex = selectedIndex; // Обновляем индекс
+            }
+            btnC = 0; // Сбрасываем счетчик
+        } 
+        if (btnD > threshold) {
+            selectedIndex++;
             if (selectedIndex >= menuCount) {
                 selectedIndex = 0; // Зацикливаем вверх
             }
-    showMenu(selectedIndex);
-    btnD = 0;
-  }
-}
+            if (lastSelectedIndex != selectedIndex) {
+                showMenu(selectedIndex); // Обновляем меню
+                lastSelectedIndex = selectedIndex; // Обновляем индекс
+            }
+            btnD = 0; // Сбрасываем счетчик
+        }
+    }
 }
 
 void showMenu(int index) {
@@ -65,10 +83,10 @@ void executeSelectedOption(int index) {
             indikat();
             break;
         case 1:
-            debug();
+            //debug();
             break;
         case 2:
-            status_loop();
+            //status_loop();
             break;
         case 3:
             displayTime();
@@ -77,10 +95,9 @@ void executeSelectedOption(int index) {
             tama_draw();
             break;
         case 5:
-            byte_draw();
+            game_loop();
             break;
         default:
-            bot_loop();
             break;
     }
     showMenu(selectedIndex); // Вернуться к меню
