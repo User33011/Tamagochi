@@ -1,8 +1,8 @@
 static void displayValue(int value, int row) {
-    oled.setCursor(50, row);
+    oled.setCursorXY(50, row);
     oled.print(value);
     if (value < 10) {
-        oled.setCursor(55, row);
+        oled.setCursorXY(55, row);
         oled.print(" ");
     }
 }
@@ -10,22 +10,18 @@ void status_loop() {
     while (true) {
         const int btnA = digitalRead(BUTTON_A);
         oled.clear();
-
-        // Печать заголовков
-        const char* titles[] = {"Голод", "Жажда", "Игра", "Сон", "Лоток", "Здоровье", "Радость"};
-        for (int i = 0; i < 8; i++) {
-            oled.setCursor(0, i);
-            oled.print(titles[i]);
-        }
-
+        oled.drawBitmap(0, 0, stats, 48, 64, BITMAP_NORMAL, BUF_ADD);
+        oled.setCursorXY(64, 0);
+        oled.print("Мес.");
         // Печать значений
         displayValue(tama.food, 0);
-        displayValue(tama.water, 1);
-        displayValue(tama.game, 2);
-        displayValue(tama.sleep, 3);
-        displayValue(tama.shit, 4);
-        displayValue(tama.health, 5);
-        displayValue(tama.happiness, 6);
+        displayValue(tama.water, 8);
+        displayValue(tama.game, 16);
+        displayValue(tama.sleep, 24);
+        displayValue(tama.shit, 32);
+        displayValue(tama.health, 40);
+        displayValue(tama.happiness, 48);
+        displayValue(tama.age, 56);
         oled.update();
         // Обновление состояния раз в 2000 мс
         if (lifetimer >= 2000) {
